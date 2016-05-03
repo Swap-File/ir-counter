@@ -20,8 +20,6 @@ RF24 radio(7, 8);
 #define LEFT_SENSOR_PIN 2
 #define RIGHT_SENSOR_PIN 3
 
-#define RESET_TIME_INT 1500 //1khz input wave * 1.5 for leeway
-
 volatile uint32_t in_count = 0;
 volatile uint32_t out_count = 0;
 volatile uint16_t time_since_output = 0;
