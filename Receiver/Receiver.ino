@@ -44,6 +44,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(LEFT_SENSOR_PIN), left_isr, CHANGE);
   attachInterrupt(digitalPinToInterrupt(RIGHT_SENSOR_PIN), right_isr, CHANGE);
 
+  ADCSRA = 0;   // disable ADC
   power_adc_disable();  //disable adc
   power_usart0_disable();
   power_timer0_disable();
@@ -99,7 +100,7 @@ void check_for_motion() {
     time_since_output = 0;
     output_data();
   }
-  
+
   FlexiTimer2::start();
 }
 
