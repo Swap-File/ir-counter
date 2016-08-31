@@ -1,12 +1,12 @@
-#include <EEPROM.h>
-#include <EEPROMWearLeveler.h>
-#include <SPI.h>
+//#include <EEPROM.h>
+//#include <EEPROMWearLeveler.h>
+//#include <SPI.h>
 #include "RF24.h"
-#include <avr/sleep.h>
-#include <avr/power.h>
+//#include <avr/sleep.h>
+//#include <avr/power.h>
 #include <FlexiTimer2.h> //must use timer2 since it runs in power save mode
 
-EEPROMWearLeveler eepromwl(1024, 128); // 32x more read/write cycles, should be good for 3.2 million per direction
+//EEPROMWearLeveler eepromwl(1024, 128); // 32x more read/write cycles, should be good for 3.2 million per direction
 RF24 radio(7, 8);
 
 #define STATION_ID 2  //CHANGE ON EVERY UNIT!
@@ -44,23 +44,23 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(LEFT_SENSOR_PIN), left_isr, CHANGE);
   attachInterrupt(digitalPinToInterrupt(RIGHT_SENSOR_PIN), right_isr, CHANGE);
 
-  ADCSRA = 0;   // disable ADC
-  power_adc_disable();  //disable adc
-  power_usart0_disable();
-  power_timer0_disable();
-  power_timer1_disable();
-  power_twi_disable();  //disable i2c
-  power_spi_disable();  //disable SPI, will enable as needed
+//  ADCSRA = 0;   // disable ADC
+//  power_adc_disable();  //disable adc
+ // power_usart0_disable();
+  //power_timer0_disable();
+ // power_timer1_disable();
+ // power_twi_disable();  //disable i2c
+ // power_spi_disable();  //disable SPI, will enable as needed
 
-  set_sleep_mode (SLEEP_MODE_PWR_SAVE);
-  sleep_enable();
+ // set_sleep_mode (SLEEP_MODE_PWR_SAVE);
+ // sleep_enable();
 
   FlexiTimer2::set(2, 1.0 / 1000, check_for_motion); // call every ~2ms
   FlexiTimer2::start();
 }
 
 void loop() {
-  sleep_cpu();
+//  sleep_cpu();
 }
 
 void left_isr() {
@@ -105,18 +105,18 @@ void check_for_motion() {
 }
 
 void WriteLongEEPROM(byte addr, unsigned long data) {
-  eepromwl.write(addr + 0, (byte)((data >> 24) & 0xff));
-  eepromwl.write(addr + 1, (byte)((data >> 16) & 0xff));
-  eepromwl.write(addr + 2, (byte)((data >> 8) & 0xff));
-  eepromwl.write(addr + 3, (byte)(data & 0xff));
+  ///eepromwl.write(addr + 0, (byte)((data >> 24) & 0xff));
+  //eepromwl.write(addr + 1, (byte)((data >> 16) & 0xff));
+ // eepromwl.write(addr + 2, (byte)((data >> 8) & 0xff));
+ // eepromwl.write(addr + 3, (byte)(data & 0xff));
 }
 
 uint32_t ReadLongEEPROM(byte addr) {
   uint32_t result;
-  result = ((uint32_t)eepromwl.read(addr + 0)) << 24;
-  result |= ((uint32_t)eepromwl.read(addr + 1)) << 16;
-  result |= ((uint32_t)eepromwl.read(addr + 2)) << 8;
-  result |= ((uint32_t)eepromwl.read(addr + 3));
+ /// result = ((uint32_t)eepromwl.read(addr + 0)) << 24;
+//  result |= ((uint32_t)eepromwl.read(addr + 1)) << 16;
+ // result |= ((uint32_t)eepromwl.read(addr + 2)) << 8;
+ // result |= ((uint32_t)eepromwl.read(addr + 3));
   return result;
 }
 
@@ -124,6 +124,10 @@ void output_data() {
 
   uint8_t payload[9];
   payload[0] = STATION_ID;
+  
+Serial.print(in_count);
+Serial.print(' ');
+Serial.println(out_count);
 
   //snapshot data
   payload[1] = (in_count >> 24) & 0xFF;
@@ -135,16 +139,16 @@ void output_data() {
   payload[7] = (out_count >> 8) & 0xFF;
   payload[8] = (out_count >> 0) & 0xFF;
 
-  interrupts();
+ // interrupts();
 
-  power_timer0_enable();  //something in the radio library needs timer0?
-  power_spi_enable();
+ // power_timer0_enable();  //something in the radio library needs timer0?
+ // power_spi_enable();
   radio.powerUp();
 
   radio.write( &payload, 9 );
 
   radio.powerDown();
-  power_spi_disable();
-  power_timer0_disable();
+//  power_spi_disable();
+//  power_timer0_disable();
 
 }

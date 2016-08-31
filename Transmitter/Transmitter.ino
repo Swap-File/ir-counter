@@ -1,6 +1,6 @@
 const byte LED = 9;  // Timer 1 "A" output: OC1A
 
-ISR (TIMER2_COMPA_vect)
+ISR (TIMER4_COMPA_vect)
 {
   TCCR1A ^= _BV (COM1A0) ;  // Toggle OC1A on Compare Match
   
@@ -22,10 +22,10 @@ void setup() {
  // 16 MHz clock (62.5 nS per tick) - prescaled by 128
  //  counter increments every 8 uS. 
  // So we count 125 of them, giving exactly 1000 uS (1 mS)
- TCCR2A = _BV (WGM21) ;   // CTC mode
- OCR2A  = 124;            // count up to 125  (zero relative!!!!)
- TIMSK2 = _BV (OCIE2A);   // enable Timer2 Interrupt
- TCCR2B =  _BV (CS20) | _BV (CS22) ;  // prescaler of 128
+ TCCR4A = _BV (WGM41) ;   // CTC mode
+ OCR4A  = 124;            // count up to 125  (zero relative!!!!)
+ TIMSK4 = _BV (OCIE4A);   // enable Timer2 Interrupt
+ TCCR4B =  _BV (CS40) | _BV (CS42) ;  // prescaler of 128
 
 }  // end of setup
 
