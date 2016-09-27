@@ -98,6 +98,7 @@ void update_display() {
   }
   if (counters_active + 1 == MAX_STATIONS) {
     Serial.print(F("Warning: Memory is Full!"));
+    }
   }
 }
 
