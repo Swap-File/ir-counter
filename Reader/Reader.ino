@@ -77,6 +77,33 @@ void loop(void) {
       counter_index = (counter_index + 1) % MAX_STATIONS;
       update_display();
     }
+  }
+
+
+  //only redraw screen if data changes
+  if (update_screen) {
+    if (counters_active > 0) {
+
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print(counters[counter_index].station_id);
+
+      lcd.setCursor(2, 1);
+      lcd.print("O: ");
+      lcd.print(counters[counter_index].out_count);
+
+      lcd.setCursor(2, 0);
+      lcd.print("I: ");
+      lcd.print(counters[counter_index].in_count);
+
+    } else {
+
+      lcd.clear();
+      lcd.setCursor(2, 0);
+      lcd.print("Watching for");
+      lcd.setCursor(2, 1);
+      lcd.print("Counters...");
+      update_screen = false;
 
     if (millis() - display_update > 1000) {
       update_display();
