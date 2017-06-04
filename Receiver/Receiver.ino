@@ -7,7 +7,7 @@
 EEPROMWearLeveler eepromwl(1024, 128); // 32x more read/write cycles, should be good for 3.2 million per direction
 RF24 radio(7, 8);
 
-#define STATION_ID 2  //CHANGE ON EVERY UNIT!
+#define STATION_ID 1  //CHANGE ON EVERY UNIT!
 
 #define IN_OUT_READY 0
 #define IN_STARTING 1
